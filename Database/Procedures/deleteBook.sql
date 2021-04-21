@@ -9,22 +9,19 @@ a: begin
 declare approvedholdCount int;
 declare activeHoldCount int;
 declare loanCount int;
-set loanCount = -1;
-set approvedholdCount = -1;
-set activeHoldCount = -1;
-select count(userID) into approvedholdCount from bookCopiesUser
+select count(bookCopiesUser.userID) into approvedholdCount from bookCopiesUser
 where bookCopiesUser.ISBN = ISBN and bookCopiesUser.action = 'hold';
-select count(userID) into loanCount from bookCopiesUser
+select count(bookCopiesUser.userID) into loanCount from bookCopiesUser
 where bookCopiesUser.ISBN = ISBN and bookCopiesUser.action != 'hold';
-select count(userID) into activeHoldCount from holdRequest
+select count(holdRequest.userID) into activeHoldCount from holdRequest
 where holdRequest.ISBN = ISBN;
-if(loanCount != -1) then
+if(loanCount != null) then
     set inv = 2;
     leave a;
-elseif(approvedholdCount != -1) then
+elseif(approvedholdCount != null) then
     set inv = 1;
     leave a;
-elseif(activeHoldCount != -1) then
+elseif(activeHoldCount != null) then
     set inv = 0;
     delete from holdRequest where holdRequest.ISBN = ISBN;
     delete from bookCopies where bookCopies.ISBN = ISBN;
@@ -39,6 +36,7 @@ delimiter ;
 -- call procedure
 call deleteBook('123', @inv);
 select @inv;
+select @loanCount;
 -- inv = 0: Only active hold requests exist
 -- inv = 1: active and approved hold exist
 -- inv = 2: Loan, Hold, Loan&Hold exist

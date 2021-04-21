@@ -89,7 +89,7 @@ router.post('/feedback',async (req,res)=>{
     let data = req.body.data;
     let obj = (Object.fromEntries([...new URLSearchParams(data)]));
     console.log(obj);
-    await cquery(`insert into feedback(name,email,phone,feedback) values (${obj.name},${obj.email},${obj.phone},${obj.feedback});`);
+    await cquery(`insert into feedback(name,email,phone,feedback) values ('${obj.name}','${obj.email}','${obj.phone}','${obj.feedback}');`);
     res.send({
         message : 'Thank you for your feedback!!'
     })
