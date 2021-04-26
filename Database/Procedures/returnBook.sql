@@ -11,6 +11,7 @@ declare status varchar(20);
 set status = '';
 delete from bookCopiesUser where bookCopiesUser.userID = userID and 
 bookCopiesUser.ISBN = ISBN and bookCopiesUser.copyID = copyID;
+delete from holdRequest where holdRequest.userID = userID and holdRequest.ISBN = ISBN;
 update bookCopies set bookCopies.bookStatus = 'shelf', bookCopies.dueDate = NULL
 where bookCopies.ISBN = ISBN and bookCopies.copyID = copyID;
 update book set book.noOfCopiesOnShelf = book.noOfCopiesOnShelf + 1
