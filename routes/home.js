@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const path = '../views/home/';
 const mysql = require('mysql');
-const href = 'http://localhost:5000/';
+const domain = require('./domain')
+const href = domain.href;
 
 const cquery = async  (sql,req,res)=>{
     return new Promise((resolve,reject)=>{

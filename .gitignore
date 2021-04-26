@@ -1,4 +1,4 @@
 node_modules/
 keys.js
-config/keys
+config/keys.js
 Database/Procedures/Testing.sql

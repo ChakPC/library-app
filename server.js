@@ -2,8 +2,8 @@ const express = require("express");
 
 const authRouter = require('./routes/auth-routes');
 const profileRouter = require('./routes/profile-routes');
-const librarianRouter=require('./routes/librarian');
-const userRouter=require('./routes/user');
+const librarianRouter = require('./routes/librarian');
+const userRouter = require('./routes/user');
 const homerouter = require('./routes/home');
 
 const LocalStrategy = require('passport-local').Strategy;
@@ -11,7 +11,7 @@ const customStrategy = require('./config/custom-strategy');
 const passportSetup = require('./config/passport-setup');
 const keys2 = require('./config/keys');
 const passport = require('passport');
-
+const domain = require('./routes/domain');
 const cors = require("cors");
 const ejs = require("ejs");
 const mysql = require('mysql');
@@ -51,33 +51,29 @@ app.set('view engine', 'ejs');
 app.use(express.static('views'));
 app.set('views', __dirname + '/views');
 
-// Local Host Vaibhav
-// var db_config = {
-//     multipleStatements: true,
-//     host: 'localhost',
-//     user: 'vaibhav',
-//     password: 'password',
-//     database: 'mydb',
-//     port: 3306
-// };
-// Local Host PC
-var db_config = {
-    multipleStatements: true,
-    host: 'localhost',
-    user: 'root',
-    password: 'Titu*2802',
-    database: 'iitilrc',
-    port: 3306
-};
-// ClearDB
-// var db_config = {
-//     multipleStatements: true,
-//     host: keys.db_host,
-//     user: keys.db_user,
-//     password: keys.db_password,
-//     database: keys.db_name,
-//     port: 3306
-// };
+var db_config;
+// Local Host
+if (domain.href == 'http://localhost:5000/') {
+    db_config = {
+        multipleStatements: true,
+        host: 'localhost',
+        user: 'vaibhav',
+        password: 'password',
+        database: 'mydb',
+        port: 3306
+    };
+} else {
+
+    // ClearDB
+    var db_config = {
+        multipleStatements: true,
+        host: keys.db_host,
+        user: keys.db_user,
+        password: keys.db_password,
+        database: keys.db_name,
+        port: 3306
+    };
+}
 // Another DB 
 // var db_config = {
 //     multipleStatements: true,
@@ -112,29 +108,29 @@ function handleDisconnect() {
 
 handleDisconnect();
 
-const cquery = async  (sql,req,res)=>{
-    return new Promise((resolve,reject)=>{
-        connection.query(sql,(err,result)=>{
-            if(err) throw err;
+const cquery = async (sql, req, res) => {
+    return new Promise((resolve, reject) => {
+        connection.query(sql, (err, result) => {
+            if (err) throw err;
             resolve(result);
         })
     }
     )
 }
 
-const auth = (req,res,next) => {
-    if(req.user){
+const auth = (req, res, next) => {
+    if (req.user) {
         next();
-    }else{
+    } else {
         res.redirect('/auth/login');
     }
 }
 
 app.use("/", homerouter);
 app.use('/auth', authRouter);
-app.use('/profile',auth, profileRouter);
-app.use('/librarian',auth, librarianRouter);
-app.use('/user',auth, userRouter);
+app.use('/profile', auth, profileRouter);
+app.use('/librarian', auth, librarianRouter);
+app.use('/user', auth, userRouter);
 app.listen(port, () => {
     console.log("Server is running at port : ", port);
 });

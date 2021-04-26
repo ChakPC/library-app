@@ -2,7 +2,8 @@ const { createConnection } = require('mysql');
 
 const router = require('express').Router();
 const path = '../views/librarian/';
-const href = 'http://localhost:5000/';
+const domain = require('./domain')
+const href = domain.href;
 
 const cquery = async (sql) => {
     return new Promise((resolve, reject) => {

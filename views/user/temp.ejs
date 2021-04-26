@@ -21,10 +21,11 @@
     </table>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        let path = window.location.origin;
         $(document).ready(function () {
             $(".button").click(function () {
                 $.ajax({type:"POST",
-                    url: "http://localhost:5000/user/getbooksdata", data: {sub : $(".sub").val()}, success: function (result) {
+                    url: path + "user/getbooksdata", data: {sub : $(".sub").val()}, success: function (result) {
                         console.log(result);
                         $(".table").find("tr:gt(0)").remove();
                         for(let i=0;i<result.length;i++){

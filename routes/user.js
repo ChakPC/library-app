@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const path = '../views/user/';
-const href = 'http://localhost:5000/';
+const domain = require('./domain')
+const href = domain.href;
 
 
 const cquery = async  (sql,req,res)=>{
@@ -58,8 +59,8 @@ router.post('/getbooksdata',async (req,res)=>{
     let sub=req.body.sub;
     if(books.length == 0){
         console.log('called');
-        books = await cquery('select * from book;');
     }
+    books = await cquery('select * from book;');
     if(sub.length == 0){
         res.send({});
     }else{
@@ -137,8 +138,8 @@ router.get('/friends',async (req,res)=>{
 router.post('/findfriends',async (req,res)=>{
     let sub = req.body.sub; 
     if(users.length == 0){
-        users = await cquery(`select * from user where userId <> ${req.user.accountID};`);
     }
+    users = await cquery(`select * from user where userId <> ${req.user.accountID};`);
     let result=[];
     for(let i=0;i<users.length;i++){
         if(users[i].name.toUpperCase().indexOf(sub.toUpperCase()) > -1){

@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const path = '../views/common/';
 const passport = require('passport');
-const href = 'http://localhost:5000/';
+const domain = require('./domain')
+const href = domain.href;
 const bcrypt = require('bcrypt');
 const keys = require('../keys');
 const saltRounds = keys.salt;
@@ -33,6 +34,8 @@ const cquery = async (sql, req, res) => {
 }
 
 router.get('/login', async (req, res) => {
+    let temp = await hash('abc');
+    console.log(temp);
     if (req.user) {
         if (req.user.accountType == 'librarian') {
             res.redirect('/librarian/home');
